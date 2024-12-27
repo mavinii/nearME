@@ -1,5 +1,6 @@
 import { View, } from 'react-native';
-import { IconMap } from '@tabler/icons-react-native'
+import { IconMap } from '@tabler/icons-react-native';
+import { router } from 'expo-router';
 
 import { Welcome } from '@/components/welcome';
 import { Steps } from '@/components/steps';
@@ -11,7 +12,7 @@ export default function Index() {
       <Welcome />
       <Steps />
 
-      <Button>
+      <Button onPress={() => router.navigate('/home')}>
         <Button.Title>Start</Button.Title>
         <Button.Icon icon={IconMap} /> 
       </Button>
