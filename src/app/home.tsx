@@ -7,11 +7,13 @@ import { Categories, CategoiesProps } from '@/components/categories'
 
 export default function Home(){
     const [categories, setCategories] = useState<CategoiesProps>([])
+    const [category, setCategory] = useState('')
 
     async function fetchCategories(){
         try {
             const { data } = await api.get('/categories')
             setCategories(data)
+            setCategory(data[0].id)
         } catch (error) {
             console.log(error)
             Alert.alert('Error', 'An error occurred while loading the categories')
@@ -28,7 +30,11 @@ export default function Home(){
             justifyContent: 'center', 
             alignItems: 'center' }}
         >
-            <Categories data={categories} />
+            <Categories 
+                data={categories} 
+                selected={category}
+                onSelect={setCategory}
+            />
             <Text>Home</Text>
         </View>
     )
