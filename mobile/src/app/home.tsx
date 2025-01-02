@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { View, Text, Alert } from "react-native";
+import MapView from 'react-native-maps';
 
 import { api } from '@/services/api'
 
@@ -47,18 +48,14 @@ export default function Home(){
     }, [category])
 
     return(
-        <View style={{ 
-            flex: 1, 
-            justifyContent: 'center', 
-            alignItems: 'center',
-            backgroundColor: '#CECECE'
-        }}>
+        <View style={{ flex: 1, backgroundColor: '#CECECE' }}>
             <Categories 
                 data={categories} 
                 selected={category}
                 onSelect={setCategory}
             />
-            <Text>MAP GOES HERE</Text>
+            
+            <MapView style={{ flex: 1 }} />
 
             <Places data={markets} />
         </View>
