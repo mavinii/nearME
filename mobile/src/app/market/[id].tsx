@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { View, Alert, Modal } from "react-native"
+import { useEffect, useState, useRef } from 'react'
+import { View, Alert, Modal, StatusBar, ScrollView } from "react-native"
 import { router, useLocalSearchParams, Redirect } from "expo-router"
 import { useCameraPermissions, CameraView } from 'expo-camera';
 
@@ -18,12 +18,15 @@ type DataProps = PropDetails & {
 export default function Market(){
     const [data, setData] = useState<DataProps>()
     const [coupon, setCoupon] = useState<string | null>(null)
-    const [couponIsFetching, setCouponIsFetching] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
+    const [couponIsFetching, setCouponIsFetching] = useState(false)
     const [isVisibleCameraModal, setIsVisibleCameraModal] = useState(false)
 
     const [_, requestPermission] = useCameraPermissions()
     const params = useLocalSearchParams<{ id: string }>()
+
+    const qrLock = useRef(false)
+    console.log(params.id)
 
     // Fetch market data
     async function fetchMarket(){
@@ -51,9 +54,10 @@ export default function Market(){
                 return Alert.alert("Camera", "Please allow camera to read the QR Code. Go to: Settings > Apps > NearME > Permissions > Camera.")
             }
 
+            qrLock.current = false
             setIsVisibleCameraModal(true)
         } catch (error) {
-            console.log(`Caera, Access Denied!: ${error}`)
+            console.log(`Camera, Access Denied!: ${error}`)
             Alert.alert("Camera", "Access Denied!")
         }
     }
@@ -65,7 +69,7 @@ export default function Market(){
 
             const { data } = await api.patch(`/coupons/${id}`)
 
-            Alert.alert("Success", "Coupon has been redeemed!", data.coupon)
+            Alert.alert("Success", `Here is your code: ${data.coupon}, enjoy!`)
             setCoupon(data.coupon)
         } catch (error) {
             console.log(`QR Code is invalid! ${error}`)
@@ -75,9 +79,23 @@ export default function Market(){
         }
     }
 
+    // Handle use coupon
+    function handleUseCoupon(id: string){
+        setIsVisibleCameraModal(false)
+
+        Alert.alert(
+            "Attention!", 
+            "You are about to redeem a coupon! Do you really wish to continue?", 
+            [
+                { style: "cancel", text: "No" },
+                { text: "Yes", onPress: () => handleQRCodeScanner(id) },
+            ]
+        )
+    }
+
     useEffect(() => {
         fetchMarket()
-    }, [params.id])
+    }, [params.id, coupon])
 
     if(isLoading){
         return <Loading />
@@ -89,11 +107,15 @@ export default function Market(){
 
     return (
         <View style={{ flex: 1 }}>
-            <Cover uri={data?.cover} />
-            <Details data={data} />
-            
-            {/* Only shows if there is coupon available */}
-            {coupon && <Coupon code={coupon} />}
+            <StatusBar barStyle="light-content" hidden={isVisibleCameraModal} />
+
+            <ScrollView showsHorizontalScrollIndicator={false}>
+                <Cover uri={data?.cover} />
+                <Details data={data} />
+                
+                {/* Only shows if there is coupon available */}
+                {coupon && <Coupon code={coupon} />}
+            </ScrollView>
 
             <View style={{ padding: 32 }}>
                 <Button onPress={handleOpenCamera}>
@@ -109,7 +131,12 @@ export default function Market(){
                 <CameraView 
                     style={{ flex:1 }} 
                     facing='back'
-                    onBarcodeScanned={({ data }) => console.log(data)}    
+                    onBarcodeScanned={({ data }) => {
+                        if(data && !qrLock.current){
+                            qrLock.current = true
+                            setTimeout(() => handleUseCoupon(data), 500)
+                        }
+                    }}    
                 />
                 
                 <View style={{ position: "absolute", bottom: 32, left: 32, right: 32 }}>
