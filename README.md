@@ -2,6 +2,8 @@
   <h1 align="center">NearMe!</h1>
 </p>
 
+https://github.com/user-attachments/assets/6fe06e09-dfb0-4fff-919b-a81c1a672fac
+
 <table align="center">
   <tr>
     <td align="center"><img alt="NearMe Splash Screen" src="./preview/splash_screen.png" width="300px"></td>
