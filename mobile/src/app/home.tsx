@@ -18,13 +18,9 @@ type MarketProps = PlaceProps & {
 
 const currentLocation = {
 
-    // Av. Paulista location
-    latitude: -23.561682,
-    longitude: -46.656139,
-
     // Dublin location
-    // latitude: 53.33273145639512,
-    // longitude: -6.258848377187246,
+    latitude: 53.3441947346456, 
+    longitude: -6.259394687906297,
 }
 
 export default function Home(){

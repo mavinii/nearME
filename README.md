@@ -4,8 +4,12 @@
 
 <table align="center">
   <tr>
-    <td align="center"><img alt="NearMe Splash Screen" src="./preview/splash_screen.jpeg" width="300px"></td>
-    <td align="center"><img alt="NearMe Welcome Screen" src="./preview/welcome_sreen.jpeg" width="300px"></td>
+    <td align="center"><img alt="NearMe Splash Screen" src="./preview/splash_screen.png" width="300px"></td>
+    <td align="center"><img alt="NearMe Welcome Screen" src="./preview/welcome_sreen.png" width="300px"></td>
+  </tr>
+  <tr>
+    <td align="center"><img alt="NearMe Map Location Screen" src="./preview/map-location_screen.png" width="300px"></td>
+    <td align="center"><img alt="NearMe About the place Screen" src="./preview/about-place_screen.png" width="300px"></td>
   </tr>
 </table>
 

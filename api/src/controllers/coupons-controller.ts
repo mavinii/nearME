@@ -18,11 +18,11 @@ class CouponsController {
       })
 
       if (!market) {
-        throw new AppError("No place available!", 404)
+        throw new AppError("Place not found!", 404)
       }
 
       if (market.coupons <= 0) {
-        throw new AppError("No coupons available yet!")
+        throw new AppError("There is no copuons available!")
       }
 
       await prisma.market.update({
